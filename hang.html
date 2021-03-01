@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Hangman</title>
+  <style>
+body{
+	text-align:center;
+	font-family: Arial, Helvetica, sans-serif;
+	background-color:#e6f2ff;
+	}
+	
+h1{
+	font-size:50px;
+	letter-spacing: 5px;
+	}	
+	
+p{
+	font-size:20px;
+	}
+	
+div{
+
+	width: 350px;
+    height: 480px;
+    background-color: #b3d9ff;
+    margin-top: 5% ;
+    margin-left: 35%;
+	padding: 3%;
+}
+
+#oneL{
+	background-color:red;
+}
+
+  </style>
+  </head>
+
+  <body onload="start()">
+<div>
+  <h1>Hangman</h1><br>
+  <h2>Guess a letter:</h2>
+  <input id="letter" type="text" autofocus>
+  <input type="button" value="Try" OnClick="Letter();">
+  <p id="answer"></p>
+  <p id="usedL">Used letters: </p>
+  <p id="lives"></p>
+  <p id="oneL"></p>
+  <input type="button" value="New Game" onClick="NewGame()">
+</div>
+
+ <script>
+  var randomWordsArr = ["fruit", "salt", "apple", "orange", "computer", "machine", "pet", "drink"];
+  var randomWord;
+  var s;
+  var live = 10;
+  var answerArray=[];
+  var guessedLettersCount = 0;
+  randomizeWords();
+	
+  function randomizeWords()
+  {
+    randomWord = randomWordsArr[Math.floor(Math.random()*randomWordsArr.length)];
+  }
+
+  function NewGame()
+{
+	randomizeWords();
+    document.getElementById("answer").innerHTML = "";
+	start();
+    var usedLetters = document.getElementById("usedL");
+    usedLetters.innerHTML = "Used letters: ";
+	document.getElementById("oneL").innerHTML = "";
+	live = 10;
+	guessedLettersCount = 0;
+	document.getElementById("lives").innerHTML = "";
+}
+
+  function start()
+  {
+  	answerArray=[];
+	for (var i = 0; i < randomWord.length; i++)
+	{
+		answerArray[i] = "_";
+	}
+	s = answerArray.join(" ");
+	document.getElementById("answer").innerHTML = s;
+  }
+
+  function livesLeft()
+  {
+	if(guessedLetters == 0 )
+	{
+		live--;
+		document.getElementById("lives").innerHTML = "You've : " + live + " lives left";
+	}	
+	if(guessedLettersCount == randomWord.length)
+	{
+		document.getElementById("lives").innerHTML = "You won!";
+	}
+	if(live == 0)
+	{
+		document.getElementById("lives").innerHTML = "You Lost!!! Sorry, try again!";
+	}
+}
+
+  function Letter()
+  {
+  guessedLetters = 0;
+  	if (live != 0 && guessedLettersCount != randomWord.length) 
+  	{
+		var letter = document.getElementById("letter").value;
+
+		if(letter.length !== 1)
+		{
+			document.getElementById("oneL").innerHTML = " You must use at least 1 letter!";
+		}
+		else
+		{
+			for (var i = 0; i < randomWord.length; i++)
+			{
+				if(randomWord[i] === letter && answerArray[i] !== letter)
+				{
+					answerArray[i] = letter;
+					guessedLettersCount ++;
+					guessedLetters++;
+				}				
+			}
+			document.getElementById("answer").innerHTML = answerArray.join(" ");
+			document.getElementById("oneL").innerHTML = "";
+			usedLetters();		
+			livesLeft();
+		}
+	}
+}
+
+  function usedLetters()
+{
+        var usedLetters = document.getElementById("usedL");
+		usedLetters.innerHTML += " " + letter.value;
+		letter.value="";
+}
+  </script>
+  </body>
+ </html>
